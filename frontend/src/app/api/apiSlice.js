@@ -16,8 +16,9 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   console.log("SIEMA");
   let result = await baseQuery(args, api, extraOptions);
-  console.log("SIEMA2");
-  if (result?.error?.originalStatus === 401) {
+  console.log(result?.error?.status);
+  console.log(result?.error);
+  if (result?.error?.status === 401) {
     console.log("sending refresh token");
     // send refresh token to get new access token
     const refreshResult = await baseQuery(

@@ -8,6 +8,7 @@ import pl.cezary.webbanking.models.User;
 import pl.cezary.webbanking.payload.request.LoginRequest;
 import pl.cezary.webbanking.payload.request.SignupRequest;
 import pl.cezary.webbanking.payload.response.MessageResponse;
+import pl.cezary.webbanking.payload.response.TokenRefreshResponse;
 import pl.cezary.webbanking.payload.response.UserInfoResponse;
 import pl.cezary.webbanking.repository.RoleRepository;
 import pl.cezary.webbanking.repository.UserRepository;
@@ -64,7 +65,8 @@ public class AuthController {
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+//    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+    String accessToken = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
 
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
@@ -75,12 +77,14 @@ public class AuthController {
     ResponseCookie jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.getToken());
 
     return ResponseEntity.ok()
-              .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+//              .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
               .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
               .body(new UserInfoResponse(userDetails.getId(),
                                          userDetails.getUsername(),
                                          userDetails.getEmail(),
-                                         roles));
+                                         roles,
+                                         accessToken
+                                    ));
   }
 
   @PostMapping("/signup")
@@ -96,6 +100,8 @@ public class AuthController {
     // Create new user's account
     User user = new User(signUpRequest.getUsername(),
                          signUpRequest.getEmail(),
+                         signUpRequest.getFirstName(),
+                         signUpRequest.getLastName(),
                          encoder.encode(signUpRequest.getPassword()));
 
     Set<String> strRoles = signUpRequest.getRole();
@@ -148,22 +154,23 @@ public class AuthController {
   @PostMapping("/refreshtoken")
   public ResponseEntity<?> refreshtoken(HttpServletRequest request) {
     String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
-    
+
     if ((refreshToken != null) && (refreshToken.length() > 0)) {
       return refreshTokenService.findByToken(refreshToken)
           .map(refreshTokenService::verifyExpiration)
           .map(RefreshToken::getUser)
           .map(user -> {
-            ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user);
-            
+//            ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user);
+            String accessToken = jwtUtils.generateTokenFromUsername(user.getUsername());
+
             return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(new MessageResponse("Token is refreshed successfully!"));
+//                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .body(new TokenRefreshResponse("Token is refreshed successfully!", accessToken));
           })
           .orElseThrow(() -> new TokenRefreshException(refreshToken,
               "Refresh token is not in database!"));
     }
-    
+
     return ResponseEntity.badRequest().body(new MessageResponse("Refresh Token is empty!"));
   }
 }
