@@ -14,13 +14,14 @@ const baseQuery = fetchBaseQuery({
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
+  console.log("SIEMA");
   let result = await baseQuery(args, api, extraOptions);
-
-  if (result?.error?.orignalStatus === 403) {
+  console.log("SIEMA2");
+  if (result?.error?.originalStatus === 401) {
     console.log("sending refresh token");
     // send refresh token to get new access token
     const refreshResult = await baseQuery(
-      "/api/v1/auth/refresh-token",
+      "/api/auth/refreshtoken",
       api,
       extraOptions
     );

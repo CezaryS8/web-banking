@@ -29,10 +29,13 @@ const Login = () => {
 
     try {
       const userData = await login({ username: user, password: pwd }).unwrap();
+
+      const { accessToken, ...userWithoutToken } = userData;
+
       dispatch(
         setCredentials({
-          accessToken: "Bearer sdafasgfasg",
-          user: userData,
+          accessToken: accessToken,
+          user: userWithoutToken,
         })
       );
       setUser("");
@@ -70,7 +73,7 @@ const Login = () => {
         {errMsg}
       </p>
 
-      <h1>Employee Login</h1>
+      <h1>Login</h1>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
