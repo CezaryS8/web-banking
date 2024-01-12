@@ -2,12 +2,18 @@ package pl.cezary.webbanking.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "transfers")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class Transfer {
 
     @Id
@@ -29,57 +35,10 @@ public class Transfer {
     @NotNull
     @PastOrPresent
     @Temporal(TemporalType.TIMESTAMP)
-    private Date transferDate;
+    private LocalDateTime transferDate;
 
     @NotNull
     @Size(max = 100)
     private String title;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Account getFromAccount() {
-        return fromAccount;
-    }
-
-    public void setFromAccount(Account fromAccount) {
-        this.fromAccount = fromAccount;
-    }
-
-    public Account getToAccount() {
-        return toAccount;
-    }
-
-    public void setToAccount(Account toAccount) {
-        this.toAccount = toAccount;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Date getTransferDate() {
-        return transferDate;
-    }
-
-    public void setTransferDate(Date transferDate) {
-        this.transferDate = transferDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }
