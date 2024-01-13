@@ -11,9 +11,7 @@ import pl.cezary.webbanking.repository.AccountRepository;
 import pl.cezary.webbanking.repository.TransferRepository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransferService {

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.cezary.webbanking.models.Account;
 import pl.cezary.webbanking.models.User;
+import pl.cezary.webbanking.payload.response.AccountDetailsResponse;
 import pl.cezary.webbanking.payload.response.CreateAccountResponse;
 import pl.cezary.webbanking.repository.AccountRepository;
 import pl.cezary.webbanking.repository.UserRepository;
@@ -52,9 +53,19 @@ public class AccountService {
         return accountNumber.toString();
     }
 
-    public List<Account> getAllAccountsForUser(Long userId) {
-        return accountRepository.findByUserId(userId);
+    public List<AccountDetailsResponse> getAllAccountsForUser(Long userId) {
+
+        List<Account> accounts = accountRepository.findAllByUserId(userId);
+
+        return accounts.stream()
+                .map(account -> AccountDetailsResponse.builder()
+                        .id(account.getId())
+                        .accountNumber(account.getAccountNumber())
+                        .balance(account.getBalance())
+                        .build())
+                .toList();
     }
+
 
     public Account getAccountByAccountNumber(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber).orElseThrow(() -> new RuntimeException("Account not found"));

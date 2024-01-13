@@ -6,6 +6,7 @@ import Login from "./features/auth/Login";
 import Welcome from "./features/auth/Welcome";
 import RequireAuth from "./features/auth/RequireAuth";
 import UsersList from "./features/users/UsersList";
+import Accounts from "./features/user/accounts/Accounts";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<RequireAuth />}>
           <Route path="welcome" element={<Welcome />} />
           <Route path="userlist" element={<UsersList />} />
+          <Route path="accounts" element={<Accounts />} />
         </Route>
       </Route>
     </Routes>

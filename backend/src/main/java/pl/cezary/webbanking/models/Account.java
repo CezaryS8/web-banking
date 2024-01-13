@@ -42,20 +42,4 @@ public class Account {
         this.accountNumber = accountNumber;
         this.balance = balance;
     }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public void setCards(Set<Card> cards) {
-        this.cards = cards;
-    }
 }

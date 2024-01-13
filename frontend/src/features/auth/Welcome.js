@@ -15,6 +15,7 @@ const Welcome = () => {
       <p>Token: {tokenAbbr}</p>
       <p>
         <Link to="/userlist">Go to the Users List</Link>
+        <Link to="/accounts">Accounts</Link>
       </p>
     </section>
   );
