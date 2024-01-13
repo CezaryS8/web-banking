@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.cezary.webbanking.models.Account;
 import pl.cezary.webbanking.models.Card;
+import pl.cezary.webbanking.payload.response.CardInsensitiveDetailsResponse;
 import pl.cezary.webbanking.payload.response.CardSensitiveDetailsResponse;
 import pl.cezary.webbanking.repository.AccountRepository;
 import pl.cezary.webbanking.repository.CardRepository;
@@ -30,6 +31,17 @@ public class CardService {
         return CardSensitiveDetailsResponse.builder()
                 .cardNumber(cardNumber)
                 .cvc(cvc)
+                .build();
+    }
+
+    public CardInsensitiveDetailsResponse getCardInsensitiveDetails(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+
+        return CardInsensitiveDetailsResponse.builder()
+                .id(card.getId())
+                .cardType(card.getCardType())
+                .expirationDate(card.getExpirationDate())
                 .build();
     }
 
@@ -82,4 +94,5 @@ public class CardService {
     public boolean checkIfCardBelongsToAccount(Long userId, Long accountId) {
         return accountRepository.existsByIdAndUserId(accountId, userId);
     }
+
 }
