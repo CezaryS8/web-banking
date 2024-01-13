@@ -1,13 +1,15 @@
 package pl.cezary.webbanking.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "cards")
 public class Card {
@@ -20,8 +22,9 @@ public class Card {
     private Account account;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9]{16}$")
+//    @Pattern(regexp = "^[0-9]{16}$")
     @Column(unique = true, nullable = false)
+    @Size(max = 120)
     private String cardNumber;
 
     @NotBlank
@@ -33,7 +36,8 @@ public class Card {
     private Date expirationDate;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9]{3}$")
+//    @Pattern(regexp = "^[0-9]{3}$")
+    @Size(max = 120)
     private String cvc;
 
     public Card() {
@@ -47,51 +51,4 @@ public class Card {
         this.cvc = cvc;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public String getCardNumber() {
-        return cardNumber;
-    }
-
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
-
-    public String getCardType() {
-        return cardType;
-    }
-
-    public void setCardType(String cardType) {
-        this.cardType = cardType;
-    }
-
-    public Date getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public String getCvc() {
-        return cvc;
-    }
-
-    public void setCvc(String cvc) {
-        this.cvc = cvc;
-    }
 }

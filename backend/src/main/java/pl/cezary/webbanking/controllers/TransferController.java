@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.cezary.webbanking.payload.request.CreateTransferRequest;
 import pl.cezary.webbanking.payload.response.CreateTransferResponse;
 import pl.cezary.webbanking.security.services.UserDetailsImpl;
+import pl.cezary.webbanking.services.AccountService;
 import pl.cezary.webbanking.services.TransferService;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class TransferController {
 
     private final TransferService transferService;
+    private final AccountService accountService;
 
     @GetMapping("/test")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -34,7 +36,7 @@ public class TransferController {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
                 Long userId = ((UserDetailsImpl) principle).getId();
-                if(!transferService.checkIfAccountBelongsToUser(userId, accountId)) {
+                if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
                     return ResponseEntity.badRequest().body(null);
                 }
 
@@ -55,7 +57,7 @@ public class TransferController {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
                 Long userId = ((UserDetailsImpl) principle).getId();
-                if(!transferService.checkIfAccountBelongsToUser(userId, accountId)) {
+                if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
                     return ResponseEntity.badRequest().body(null);
                 }
 
@@ -76,7 +78,7 @@ public class TransferController {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
                 Long userId = ((UserDetailsImpl) principle).getId();
-                if(!transferService.checkIfAccountBelongsToUser(userId, accountId)) {
+                if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
                     return ResponseEntity.badRequest().body(null);
                 }
 
@@ -97,7 +99,7 @@ public class TransferController {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
                 Long userId = ((UserDetailsImpl) principle).getId();
-                if(!transferService.checkIfAccountBelongsToUser(userId, transfer.getFromAccountNumber())) {
+                if(!accountService.checkIfAccountBelongsToUser(userId, transfer.getFromAccountNumber())) {
                     return ResponseEntity.badRequest().body(null);
                 }
 

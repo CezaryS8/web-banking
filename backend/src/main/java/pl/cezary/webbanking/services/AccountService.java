@@ -65,4 +65,12 @@ public class AccountService {
         accountRepository.delete(account);
     }
 
+    public boolean checkIfAccountBelongsToUser(Long userId, Long accountId) {
+        return accountRepository.findById(accountId).get().getUser().getId().equals(userId);
+    }
+
+    public boolean checkIfAccountBelongsToUser(Long userId, String fromAccountNumber) {
+        return accountRepository.findByAccountNumber(fromAccountNumber).get().getUser().getId().equals(userId);
+    }
+
 }
