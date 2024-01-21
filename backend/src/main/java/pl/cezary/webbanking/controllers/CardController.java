@@ -5,9 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import pl.cezary.webbanking.models.Card;
+import pl.cezary.webbanking.payload.request.CodeRequest;
 import pl.cezary.webbanking.payload.response.CardInsensitiveDetailsResponse;
 import pl.cezary.webbanking.payload.response.CardSensitiveDetailsResponse;
+import pl.cezary.webbanking.security.OneTimeCodeManager;
 import pl.cezary.webbanking.security.services.UserDetailsImpl;
 import pl.cezary.webbanking.services.AccountService;
 import pl.cezary.webbanking.services.CardService;
@@ -70,8 +71,8 @@ public class CardController {
         }
     }
 
-    @GetMapping("/sensitive/account/{accountId}/card/{cardId}")
-    public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId) {
+    @PostMapping("/request-sensitive/account/{accountId}/card/{cardId}")
+    public ResponseEntity<?> requestCodeForSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
@@ -80,6 +81,32 @@ public class CardController {
                     return ResponseEntity.badRequest().body(null);
                 }
                 if(!cardService.checkIfCardBelongsToAccount(userId, accountId)) {
+                    return ResponseEntity.badRequest().body(null);
+                }
+                String code = OneTimeCodeManager.generateOneTimeCode();
+                OneTimeCodeManager.saveCodeForUser(userId, accountId, cardId, code);
+                System.out.println("One-Time Code (For testing purposes): " + code); // For real app, send this code to user's email or phone
+                return ResponseEntity.ok("Code sent to your email/phone");
+            }
+            return ResponseEntity.badRequest().body("Code not sent");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Code not sent");
+        }
+    }
+    @GetMapping("/sensitive/account/{accountId}/card/{cardId}")
+    public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId, @RequestBody CodeRequest code) {
+        try {
+            Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principle.toString() != "anonymousUser") {
+                System.out.println(code);
+                Long userId = ((UserDetailsImpl) principle).getId();
+                if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
+                    return ResponseEntity.badRequest().body(null);
+                }
+                if(!cardService.checkIfCardBelongsToAccount(userId, accountId)) {
+                    return ResponseEntity.badRequest().body(null);
+                }
+                if (!OneTimeCodeManager.isCodeValid( userId, accountId, cardId, code.getCode())) {
                     return ResponseEntity.badRequest().body(null);
                 }
 
