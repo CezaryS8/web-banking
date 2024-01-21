@@ -23,6 +23,17 @@ public class CardController {
     private final CardService cardService;
     private final AccountService accountService;
 
+    @PostMapping("/byadmin/create/account/{accountId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createCardByAdmin(@PathVariable Long accountId) {
+        try {
+            cardService.createCard(accountId);
+            return ResponseEntity.ok("Card created");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Card not created");
+        }
+    }
+
     @GetMapping("/account/{accountId}")
     public ResponseEntity<List<CardInsensitiveDetailsResponse>> getCards(@PathVariable Long accountId) {
         try {
