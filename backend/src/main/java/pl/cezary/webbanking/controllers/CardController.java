@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.cezary.webbanking.payload.request.CodeRequest;
 import pl.cezary.webbanking.payload.response.CardInsensitiveDetailsResponse;
 import pl.cezary.webbanking.payload.response.CardSensitiveDetailsResponse;
+import pl.cezary.webbanking.payload.response.MessageResponse;
 import pl.cezary.webbanking.security.OneTimeCodeManager;
 import pl.cezary.webbanking.security.services.UserDetailsImpl;
 import pl.cezary.webbanking.services.AccountService;
@@ -86,14 +87,14 @@ public class CardController {
                 String code = OneTimeCodeManager.generateOneTimeCode();
                 OneTimeCodeManager.saveCodeForUser(userId, accountId, cardId, code);
                 System.out.println("One-Time Code (For testing purposes): " + code); // For real app, send this code to user's email or phone
-                return ResponseEntity.ok("Code sent to your email/phone");
+                return ResponseEntity.ok(new MessageResponse("Code sent to your email or phone"));
             }
-            return ResponseEntity.badRequest().body("Code not sent");
+            return ResponseEntity.badRequest().body(new MessageResponse("Code not sent"));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Code not sent");
+            return ResponseEntity.badRequest().body(new MessageResponse("Code not sent"));
         }
     }
-    @GetMapping("/sensitive/account/{accountId}/card/{cardId}")
+    @PostMapping("/sensitive/account/{accountId}/card/{cardId}")
     public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId, @RequestBody CodeRequest code) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
