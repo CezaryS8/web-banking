@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import pl.cezary.webbanking.models.Card;
 import pl.cezary.webbanking.payload.response.CardInsensitiveDetailsResponse;
 import pl.cezary.webbanking.payload.response.CardSensitiveDetailsResponse;
 import pl.cezary.webbanking.security.services.UserDetailsImpl;
 import pl.cezary.webbanking.services.AccountService;
 import pl.cezary.webbanking.services.CardService;
+
+import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -19,6 +22,24 @@ public class CardController {
 
     private final CardService cardService;
     private final AccountService accountService;
+
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity<List<CardInsensitiveDetailsResponse>> getCards(@PathVariable Long accountId) {
+        try {
+            Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principle.toString() != "anonymousUser") {
+                Long userId = ((UserDetailsImpl) principle).getId();
+                if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
+                    return ResponseEntity.badRequest().body(null);
+                }
+                List<CardInsensitiveDetailsResponse> cards = cardService.getCards(accountId);
+                return ResponseEntity.ok(cards);
+            }
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
     @PostMapping("/create/account/{accountId}")
     public ResponseEntity<?> createCard( @PathVariable Long accountId ) {

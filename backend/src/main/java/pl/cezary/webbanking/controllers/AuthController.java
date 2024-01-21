@@ -142,11 +142,11 @@ public class AuthController {
       refreshTokenService.deleteByUserId(userId);
     }
     
-    ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
+//    ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
     ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
 
     return ResponseEntity.ok()
-        .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+//        .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
         .body(new MessageResponse("You've been signed out!"));
   }

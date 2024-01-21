@@ -11,6 +11,7 @@ import pl.cezary.webbanking.repository.AccountRepository;
 import pl.cezary.webbanking.repository.CardRepository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -95,4 +96,16 @@ public class CardService {
         return accountRepository.existsByIdAndUserId(accountId, userId);
     }
 
+    public List<CardInsensitiveDetailsResponse> getCards(Long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        return cardRepository.findAllByAccountId(accountId).stream()
+                .map(card -> CardInsensitiveDetailsResponse.builder()
+                        .id(card.getId())
+                        .cardType(card.getCardType())
+                        .expirationDate(card.getExpirationDate())
+                        .build())
+                .toList();
+    }
 }
