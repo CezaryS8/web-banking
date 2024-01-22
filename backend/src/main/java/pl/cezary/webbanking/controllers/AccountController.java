@@ -47,6 +47,7 @@ public class AccountController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<AccountDetailsResponse>> getAllAccounts() {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

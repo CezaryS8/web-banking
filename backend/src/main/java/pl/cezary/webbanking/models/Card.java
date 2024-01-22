@@ -22,12 +22,12 @@ public class Card {
     private Account account;
 
     @NotBlank
-//    @Pattern(regexp = "^[0-9]{16}$")
     @Column(unique = true, nullable = false)
     @Size(max = 120)
     private String cardNumber;
 
     @NotBlank
+    @Size(min = 2, max = 20)
     private String cardType;
 
     @NotNull
@@ -36,7 +36,6 @@ public class Card {
     private Date expirationDate;
 
     @NotBlank
-//    @Pattern(regexp = "^[0-9]{3}$")
     @Size(max = 120)
     private String cvc;
 

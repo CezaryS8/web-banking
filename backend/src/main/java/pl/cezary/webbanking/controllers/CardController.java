@@ -37,6 +37,7 @@ public class CardController {
     }
 
     @GetMapping("/account/{accountId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CardInsensitiveDetailsResponse>> getCards(@PathVariable Long accountId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -55,6 +56,7 @@ public class CardController {
     }
 
     @PostMapping("/create/account/{accountId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> createCard( @PathVariable Long accountId ) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -73,6 +75,7 @@ public class CardController {
     }
 
     @PostMapping("/request-sensitive/account/{accountId}/card/{cardId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> requestCodeForSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -95,6 +98,7 @@ public class CardController {
         }
     }
     @PostMapping("/sensitive/account/{accountId}/card/{cardId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId, @RequestBody CodeRequest code) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -121,6 +125,7 @@ public class CardController {
     }
 
     @GetMapping("/insensitive/account/{accountId}/card/{cardId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CardInsensitiveDetailsResponse> getCardInsensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

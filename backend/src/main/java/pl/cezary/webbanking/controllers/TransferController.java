@@ -23,14 +23,8 @@ public class TransferController {
     private final TransferService transferService;
     private final AccountService accountService;
 
-    @GetMapping("/test")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> test() {
-        return ResponseEntity.ok("Transfer Content.");
-    }
-
     @GetMapping("/account/{accountId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CreateTransferResponse>> getAllTransfersByAccountId(@PathVariable Long accountId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -51,7 +45,7 @@ public class TransferController {
     }
 
     @GetMapping("/account/{accountId}/from")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CreateTransferResponse>> getAllTransfersByFromAccountId(@PathVariable Long accountId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -72,7 +66,7 @@ public class TransferController {
     }
 
     @GetMapping("/account/{accountId}/to")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<CreateTransferResponse>> getAllTransfersByToAccountId(@PathVariable Long accountId) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -93,7 +87,7 @@ public class TransferController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CreateTransferResponse> createTransfer(@Valid @RequestBody CreateTransferRequest transfer) {
         try {
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -30,6 +30,7 @@ public class Transfer {
 
     @NotNull
     @DecimalMin(value = "0.1")
+    @DecimalMax(value = "1000000.0")
     private BigDecimal amount;
 
     @NotNull
@@ -38,7 +39,7 @@ public class Transfer {
     private LocalDateTime transferDate;
 
     @NotNull
-    @Size(max = 100)
+    @Size(max = 100, min = 2)
     private String title;
 
 }

@@ -19,9 +19,10 @@ public class CreateTransferRequest {
     private String toAccountNumber;
     @NotNull
     @DecimalMin(value = "0.1")
+    @DecimalMax(value = "1000000.0")
     private BigDecimal amount;
     @NotNull
-    @Size(max = 100)
+    @Size(max = 100, min = 2)
     private String title;
 
     public CreateTransferRequest() {

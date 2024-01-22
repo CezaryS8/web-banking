@@ -1,5 +1,6 @@
 package pl.cezary.webbanking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +21,7 @@ public class User {
   private Long id;
 
   @NotBlank
-  @Size(max = 20)
+  @Size(max = 20, min = 8)
   private String username;
 
   @NotBlank
@@ -29,11 +30,12 @@ public class User {
   private String email;
 
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 50, min = 2)
   private String firstName;
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 50, min = 2)
   private String lastName;
+  @JsonIgnore
   @NotBlank
   @Size(max = 120)
   private String password;
