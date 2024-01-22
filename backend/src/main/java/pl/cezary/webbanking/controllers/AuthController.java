@@ -151,7 +151,7 @@ public class AuthController {
         .body(new MessageResponse("You've been signed out!"));
   }
 
-  @PostMapping("/refreshtoken")
+  @GetMapping("/refreshtoken")
   public ResponseEntity<?> refreshtoken(HttpServletRequest request) {
     String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
 
