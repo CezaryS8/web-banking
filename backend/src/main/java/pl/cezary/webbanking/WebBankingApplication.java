@@ -51,10 +51,10 @@ public class WebBankingApplication {
 			Account ac2 = accountRepository.save(account2);
 			Account ac3 = accountRepository.save(account3);
 			// Save cards in the database
-			cardRepository.save(new Card(ac1, "6969000069690001", "VISA", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 1000), "969"));
-			cardRepository.save(new Card(ac2, "6969000069690002", "MASTERCARD", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 600), "696"));
-			cardRepository.save(new Card(ac1, "6969000069690003", "MASTERCARD", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 600), "696"));
-			cardRepository.save(new Card(ac3, "6969000069690004", "VISA", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 600), "696"));
+			cardRepository.save(new Card(ac1, "DT5T4tL5SIERXCm2BffDEudxlcZLHsmpJAfkBp2JYZ17sGfGAYTlq11qUUhFD7W2", "VISA", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 1000), "icAu/ML5oJmeV6u407ibjC7RXBfqjxiPFUDZgh7mLQo="));
+			cardRepository.save(new Card(ac2, "lRNkzHqH/vpxGGa4PzO5Rrj7foHv/5rEuKyRMlDnAvwCK3PNBaygma6/SlqBK6bs", "MASTERCARD", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 600), "icAu/ML5oJmeV6u407ibjC7RXBfqjxiPFUDZgh7mLQo="));
+			cardRepository.save(new Card(ac1, "1actD2k0wuRMIf1ftGXKaBC6x2+dfCEOo/8QoEsFucNWts4udN5ynNvKrLAj31dt", "MASTERCARD", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 600), "icAu/ML5oJmeV6u407ibjC7RXBfqjxiPFUDZgh7mLQo="));
+			cardRepository.save(new Card(ac3, "Zej4hiucq0c1z3TevvlmLpSrSlu5zH5hXXJ/5hkUsNmSDl+giEZspS/u+ENDMqGb", "VISA", new Date(System.currentTimeMillis() + 3L * 365 * 24 * 60 * 60 * 600), "icAu/ML5oJmeV6u407ibjC7RXBfqjxiPFUDZgh7mLQo="));
 			// Save transfers in the database
 			Transfer t1 = transferRepository.save( new Transfer(1L, ac1, ac2, new java.math.BigDecimal("100.00"), LocalDateTime.now(), "Przelew 1 - Piwo"));
 			Transfer t2 = transferRepository.save( new Transfer(2L, ac2, ac1, new java.math.BigDecimal("10.00"), LocalDateTime.now().minusDays(5), "Przelew 2 - Piwo"));
