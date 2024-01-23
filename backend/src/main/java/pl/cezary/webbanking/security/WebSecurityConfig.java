@@ -77,8 +77,8 @@ public class WebSecurityConfig {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("https://localhost")); // Allow your frontend origin here
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+    configuration.setAllowedOrigins(Arrays.asList("https://localhost"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
     configuration.setAllowCredentials(true); // Important for cookies, authorization headers
     configuration.setMaxAge(3600L); // How long the results of a preflight request can be cached

@@ -25,13 +25,10 @@ public class CardService {
     private final encryptionService encryptionService;
 
     public CardSensitiveDetailsResponse getCardSensitiveDetails(Long cardId) {
-        log.info("cardSensitiveDetailsResponse1: " );
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
-        log.info("cardSensitiveDetailsResponse2: " );
         String cardNumber = encryptionService.decrypt(card.getCardNumber());
         String cvc = encryptionService.decrypt(card.getCvc());
-        log.info("cardSensitiveDetailsResponse3: " );
         return CardSensitiveDetailsResponse.builder()
                 .cardNumber(cardNumber)
                 .cvc(cvc)

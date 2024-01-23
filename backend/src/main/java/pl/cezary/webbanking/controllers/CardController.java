@@ -103,36 +103,24 @@ public class CardController {
     @PostMapping("/sensitive/account/{accountId}/card/{cardId}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId, @Valid @RequestBody CodeRequest code) {
-        log.info("Code: " + code.getCode());
         try {
-            log.info(" Try Code: " + code.getCode());
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
-                log.info("IF Code: " + code.getCode());
-                System.out.println(code);
                 Long userId = ((UserDetailsImpl) principle).getId();
                 if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
-                    log.info("1: " + code.getCode());
                     return ResponseEntity.badRequest().body(null);
                 }
                 if(!cardService.checkIfCardBelongsToAccount(userId, accountId)) {
-                    log.info("2: " + code.getCode());
                     return ResponseEntity.badRequest().body(null);
                 }
                 if (!OneTimeCodeManager.isCodeValid( userId, accountId, cardId, code.getCode())) {
-                    log.info("3: " + code.getCode());
                     return ResponseEntity.badRequest().body(null);
                 }
-                log.info("4: " + code.getCode());
                 CardSensitiveDetailsResponse cardSensitiveDetailsResponse = cardService.getCardSensitiveDetails(cardId);
-                log.info("cardSensitiveDetailsResponse: " + cardSensitiveDetailsResponse);
                 return ResponseEntity.ok(cardSensitiveDetailsResponse);
             }
-            log.info("cardSensitiveDetailsResponse: error" );
             return ResponseEntity.badRequest().body(null);
-
         } catch (Exception e) {
-            log.info("cardSensitiveDetailsResponse: zlapalem gowno ", e );
             return ResponseEntity.badRequest().body(null);
         }
     }
