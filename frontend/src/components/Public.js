@@ -6,7 +6,6 @@ const Public = () => {
       <header>
         <h1>Welcome to CBank!</h1>
       </header>
-      {/* <main>BANK</main> */}
       <footer>
         <Link to="/login">Login</Link>
       </footer>

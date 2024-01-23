@@ -1,14 +1,18 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentToken } from "./authSlice";
+import LogoutButton from "../../components/auth/LogoutButton";
 
-// HERE WE CAN ALSO ADD ROLE CHECK...
+// TODO: role check
 const RequireAuth = () => {
   const token = useSelector(selectCurrentToken);
   const location = useLocation();
 
   return token ? (
-    <Outlet />
+    <>
+      <LogoutButton />
+      <Outlet />
+    </>
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />
   );

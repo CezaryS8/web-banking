@@ -5,7 +5,6 @@ import Public from "./components/Public";
 import Login from "./features/auth/Login";
 import Welcome from "./features/auth/Welcome";
 import RequireAuth from "./features/auth/RequireAuth";
-import UsersList from "./features/users/UsersList";
 import Accounts from "./features/user/accounts/Accounts";
 
 function App() {
@@ -19,7 +18,6 @@ function App() {
         {/* protected routes */}
         <Route element={<RequireAuth />}>
           <Route path="welcome" element={<Welcome />} />
-          <Route path="userlist" element={<UsersList />} />
           <Route path="accounts" element={<Accounts />} />
         </Route>
       </Route>

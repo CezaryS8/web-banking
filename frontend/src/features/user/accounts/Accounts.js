@@ -1,5 +1,7 @@
+import React, { useEffect } from "react";
 import { useGetAccountsQuery } from "./accountsApiSlice";
 import { Link } from "react-router-dom";
+import AccountsView from "../../../components/account/AccountsView";
 
 const Accounts = () => {
   const {
@@ -8,29 +10,29 @@ const Accounts = () => {
     isSuccess,
     isError,
     error,
+    refetch,
   } = useGetAccountsQuery();
 
-  console.log(accounts);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   let content;
   if (isLoading) {
     content = <p>"Loading..."</p>;
   } else if (isSuccess) {
     content = (
-      <section className="users">
+      <section className="accounts">
+        <Link to="/welcome">Back to Welcome</Link>
         <h1>Accounts</h1>
         <ul>
-          {accounts.map((account, i) => {
-            return (
-              <>
-                <li key={i}>
-                  {account.id} | {account.accountNumber} | {account.balance}
-                </li>
-              </>
-            );
-          })}
+          {accounts.map((account) => (
+            <li key={account.id}>
+              {account.id} | {account.accountNumber} | {account.balance}
+            </li>
+          ))}
         </ul>
-        <Link to="/welcome">Back to Welcome</Link>
+        <AccountsView accounts={accounts} />
       </section>
     );
   } else if (isError) {

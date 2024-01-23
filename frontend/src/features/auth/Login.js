@@ -40,10 +40,8 @@ const Login = () => {
       );
       setUser("");
       setPwd("");
-      console.log(userData);
       navigate("/welcome");
     } catch (err) {
-      console.log(err);
       if (!err.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 400) {
@@ -53,7 +51,7 @@ const Login = () => {
       } else {
         setErrMsg("Login failed");
       }
-      errRef.current.focus();
+      // errRef.current.focus();
     }
   };
 
