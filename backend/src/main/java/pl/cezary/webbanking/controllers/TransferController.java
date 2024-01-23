@@ -14,7 +14,7 @@ import pl.cezary.webbanking.services.TransferService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "https://localhost", allowCredentials = "true")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/transfer")

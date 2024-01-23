@@ -1,6 +1,8 @@
 package pl.cezary.webbanking.controllers;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,10 +18,11 @@ import pl.cezary.webbanking.services.CardService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "https://localhost", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/card")
 @AllArgsConstructor
+@Slf4j
 public class CardController {
 
     private final CardService cardService;
@@ -99,27 +102,37 @@ public class CardController {
     }
     @PostMapping("/sensitive/account/{accountId}/card/{cardId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId, @RequestBody CodeRequest code) {
+    public ResponseEntity<CardSensitiveDetailsResponse> getCardSensitiveDetails(@PathVariable Long accountId, @PathVariable Long cardId, @Valid @RequestBody CodeRequest code) {
+        log.info("Code: " + code.getCode());
         try {
+            log.info(" Try Code: " + code.getCode());
             Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principle.toString() != "anonymousUser") {
+                log.info("IF Code: " + code.getCode());
                 System.out.println(code);
                 Long userId = ((UserDetailsImpl) principle).getId();
                 if(!accountService.checkIfAccountBelongsToUser(userId, accountId)) {
+                    log.info("1: " + code.getCode());
                     return ResponseEntity.badRequest().body(null);
                 }
                 if(!cardService.checkIfCardBelongsToAccount(userId, accountId)) {
+                    log.info("2: " + code.getCode());
                     return ResponseEntity.badRequest().body(null);
                 }
                 if (!OneTimeCodeManager.isCodeValid( userId, accountId, cardId, code.getCode())) {
+                    log.info("3: " + code.getCode());
                     return ResponseEntity.badRequest().body(null);
                 }
-
+                log.info("4: " + code.getCode());
                 CardSensitiveDetailsResponse cardSensitiveDetailsResponse = cardService.getCardSensitiveDetails(cardId);
+                log.info("cardSensitiveDetailsResponse: " + cardSensitiveDetailsResponse);
                 return ResponseEntity.ok(cardSensitiveDetailsResponse);
             }
+            log.info("cardSensitiveDetailsResponse: error" );
             return ResponseEntity.badRequest().body(null);
+
         } catch (Exception e) {
+            log.info("cardSensitiveDetailsResponse: zlapalem gowno ", e );
             return ResponseEntity.badRequest().body(null);
         }
     }

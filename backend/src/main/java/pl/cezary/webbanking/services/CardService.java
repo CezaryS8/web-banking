@@ -1,6 +1,7 @@
 package pl.cezary.webbanking.services;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.cezary.webbanking.models.Account;
@@ -16,6 +17,7 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CardService {
 
     private final CardRepository cardRepository;
@@ -23,12 +25,13 @@ public class CardService {
     private final encryptionService encryptionService;
 
     public CardSensitiveDetailsResponse getCardSensitiveDetails(Long cardId) {
+        log.info("cardSensitiveDetailsResponse1: " );
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
-
+        log.info("cardSensitiveDetailsResponse2: " );
         String cardNumber = encryptionService.decrypt(card.getCardNumber());
         String cvc = encryptionService.decrypt(card.getCvc());
-
+        log.info("cardSensitiveDetailsResponse3: " );
         return CardSensitiveDetailsResponse.builder()
                 .cardNumber(cardNumber)
                 .cvc(cvc)

@@ -12,7 +12,7 @@ import pl.cezary.webbanking.services.AccountService;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "https://localhost", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/account")
 @AllArgsConstructor
